@@ -57,8 +57,7 @@ done
 
 # Run containers and tests for each CPU set
 counter=1
-for cores in "0"; do
-# for cores in "0" "0-1" "0-2" "0-3"; do
+for cores in "0" "0-1" "0-2" "0-3"; do
     for index in "${!images[@]}"; do
         run_container "${images[$index]}" "${containers[$index]}" "${ports[$index]}" "$cores"
         sleep 5  # Give the container some time to initialize
