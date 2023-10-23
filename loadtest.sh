@@ -14,15 +14,13 @@ run_container() {
     local image_name=$1
     local container_name=$2
     local port=$3
-    local cpuset=$4
 
-    docker run -d --name $container_name -p $port:3000 --cpuset-cpus="$cpuset" $image_name
+    docker run -d --name $container_name -p $port:3000 $image_name
 }
 
 load_test() {
     local container_name=$1
     local port=$2
-    local core_count=$3
 
     echo "Starting load test for $container_name..."
 
@@ -35,13 +33,13 @@ load_test() {
     local transfer_sec=$(echo "$output" | awk '/Transfer\/sec/ {gsub("MB","",$2); print $2}')
 
     # Append to CSV
-    echo "$core_count,$container_name,$avg_latency,$req_sec,$transfer_sec" >> results.csv
+    echo "$container_name,$avg_latency,$req_sec,$transfer_sec" >> results.csv
 
     echo "Load test for $container_name completed!"
 }
 
 # Create or overwrite the CSV file with headers
-echo "core_count,container_type,avg_latency,requests_sec,transfer_sec" > results.csv
+echo "container_type,avg_latency,requests_sec,transfer_sec" > results.csv
 
 # List of Dockerfile paths, image names, corresponding container names, and ports
 dockerfile_paths=("./axum-api" "./axum-api" "./elysia-api" "./elysia-api")
@@ -55,19 +53,12 @@ for index in "${!dockerfile_paths[@]}"; do
     build_image "${dockerfile_paths[$index]}" "${dockerfile_names[$index]}" "${images[$index]}"
 done
 
-# Run containers and tests for each CPU set
-counter=1
-for cores in "0" "0-1" "0-2" "0-3"; do
-    for index in "${!images[@]}"; do
-        run_container "${images[$index]}" "${containers[$index]}" "${ports[$index]}" "$cores"
-        sleep 5  # Give the container some time to initialize
-        load_test "${containers[$index]}" "${ports[$index]}" "$counter"
-        docker container rm -f "${containers[$index]}"
-    done
-    echo ""
-    echo "****Tests for $counter cores completed!****"
-    echo ""
-    ((counter++))
+# Run containers and tests
+for index in "${!images[@]}"; do
+    run_container "${images[$index]}" "${containers[$index]}" "${ports[$index]}"
+    sleep 5  # Give the container some time to initialize
+    load_test "${containers[$index]}" "${ports[$index]}"
+    docker container rm -f "${containers[$index]}"
 done
 
 # Plot the results

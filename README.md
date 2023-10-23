@@ -1,10 +1,9 @@
 # Performance Comparison: Axum vs. Elysia
 
-This project aims to compare the performance of web APIs built using [Axum](https://github.com/tokio-rs/axum) from the [Rust](https://www.rust-lang.org/) ecosystem and [Elysia](https://github.com/elysiajs/elysia) from the [Bun](https://bun.sh/) runtime. We'll measure various metrics such as average latency, requests per second, and data transfer rates under core allocations ranging from 1 to 4 CPU cores.
+This project aims to compare the performance of web APIs built using [Axum](https://github.com/tokio-rs/axum) from the [Rust](https://www.rust-lang.org/) ecosystem and [Elysia](https://github.com/elysiajs/elysia) from the [Bun](https://bun.sh/) runtime. We'll measure various metrics such as average latency, requests per second, and data transfer rates.
 
 ## Prerequisites
 
-- A computer with at least 6 CPU cores: 4 cores allocated for Docker containers and 2 cores for `wrk`.
 - Docker
 - `wrk` (e.g., you can install it using `brew install wrk` on macOS)
 
@@ -30,7 +29,7 @@ This project aims to compare the performance of web APIs built using [Axum](http
 
 ## Viewing Results
 
-Navigate to the `performance_graphs` directory to view the generated performance comparison graphs. These graphs illustrate how each framework performs under different core allocations.
+Navigate to the `performance_graphs` directory to view the generated performance comparison graphs.
 
 ## Contributing
 
