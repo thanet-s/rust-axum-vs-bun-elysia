@@ -5,7 +5,7 @@ This project aims to compare the performance of web APIs built using [Axum](http
 ## Prerequisites
 
 - Docker
-- `wrk` (e.g., you can install it using `brew install wrk` on macOS)
+- `wrk` (e.g., you can install it using `brew install wrk` on macOS or `sudo apt-get install wrk` on Ubuntu)
 
 ## Setup
 
