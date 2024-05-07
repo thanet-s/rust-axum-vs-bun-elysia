@@ -12,6 +12,9 @@ COPY bun.lockb .
 
 RUN /root/.bun/bin/bun install --production
 
+COPY src src
+RUN /root/.bun/bin/bun run build
+
 
 FROM gcr.io/distroless/cc-debian11
 
@@ -19,11 +22,13 @@ WORKDIR /app
 
 COPY --from=builder /root/.bun/bin/bun bun
 COPY --from=builder /app/node_modules node_modules
+COPY --from=builder /app/build build
 
 COPY src src
+COPY spawn.ts .
 COPY tsconfig.json .
 
 ENV NODE_ENV production
-CMD ["./bun", "src/index.ts"]
+CMD ["./bun", "build/index.js"]
 
 EXPOSE 3000

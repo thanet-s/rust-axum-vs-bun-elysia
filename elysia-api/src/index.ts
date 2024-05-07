@@ -5,7 +5,12 @@ function calculateBMI(weight: number, tall: number): number {
   return weight / Math.pow(tall / 100.0, 2);
 }
 
-const app = new Elysia()
+const app = new Elysia({
+  serve: {
+    // @ts-ignore
+    reusePort: true,
+  },
+})
   .model({
     BmiData: t.Object({
       weight: t.Number(),
@@ -16,17 +21,21 @@ const app = new Elysia()
       bmi: t.Number(),
     }),
   })
-  .post("/bmi/:username", ({ body, params }) => {
-    const bmi = calculateBMI(body.weight, body.tall);
+  .post(
+    "/bmi/:username",
+    ({ body, params }) => {
+      const bmi = calculateBMI(body.weight, body.tall);
 
-    return {
-      username: params.username,
-      bmi,
-    };
-  }, {
-    body: "BmiData",
-    response: "BmiResponse",
-  })
+      return {
+        username: params.username,
+        bmi,
+      };
+    },
+    {
+      body: "BmiData",
+      response: "BmiResponse",
+    }
+  )
   .listen(3000);
 
 console.log(

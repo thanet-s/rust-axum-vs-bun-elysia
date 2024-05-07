@@ -25,7 +25,7 @@ load_test() {
     echo "Starting load test for $container_name..."
 
     # Capture wrk output
-    local output=$(wrk -t2 -c400 -d20s -s bmi-post-test.lua http://localhost:$port/bmi/test)
+    local output=$(wrk -t2 -c400 -d20s -s bmi-post-test.lua http://127.0.0.1:$port/bmi/test)
 
     # Extract values using awk
     local avg_latency=$(echo "$output" | awk '/Latency/ {gsub("ms","",$2); print $2}')
