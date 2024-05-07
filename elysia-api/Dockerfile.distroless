@@ -29,6 +29,6 @@ COPY spawn.ts .
 COPY tsconfig.json .
 
 ENV NODE_ENV production
-CMD ["./bun", "build/index.js"]
+CMD ["./bun", "spawn.ts"]
 
 EXPOSE 3000
